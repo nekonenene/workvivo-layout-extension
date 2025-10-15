@@ -3,7 +3,7 @@ let scheduled = 0; // scheduleApply() にて連続発火を防ぐためのタイ
 
 // 初期値をロード
 chrome.storage.sync.get({ enabled: true }, (res: { enabled?: boolean }) => {
-  enabled = !!res.enabled;
+  enabled = res.enabled ?? true; // 未定義の場合も true
   scheduleApply();
 });
 
