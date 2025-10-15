@@ -2,14 +2,15 @@ import { defineManifest } from '@crxjs/vite-plugin';
 
 export default defineManifest({
   manifest_version: 3,
-  name: 'Workvivo Layout Modifier for Chrome Extensions',
   version: '1.0.1',
-  description: 'Workvivoのレイアウトを画面ごとに調整できるChrome拡張（ON/OFFトグル対応）',
+  default_locale: 'ja',
+  name: '__MSG_extensionName__',
+  description: '__MSG_extensionDescription__',
   icons: { '128': 'src/assets/icon128.png' },
 
   action: {
     default_popup: 'src/popup/index.html',
-    default_title: 'Workvivo Layout Modifier',
+    default_title: '__MSG_extensionName__',
   },
 
   permissions: ['storage', 'tabs'],

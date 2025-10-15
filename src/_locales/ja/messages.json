@@ -1,0 +1,17 @@
+{
+  "extensionName": {
+    "message": "Workvivo Wider Feed"
+  },
+  "extensionDescription": {
+    "message": "Workvivoのフィードの表示幅を広くすることで、投稿をより読みやすくする拡張機能です"
+  },
+  "panelTitle": {
+    "message": "設定"
+  },
+  "enableToggleLabel": {
+    "message": "拡張機能をON"
+  },
+  "afterEnableToggleInfo": {
+    "message": "OFFにすると現在のタブを自動でリロードして変更をリセットします"
+  }
+}

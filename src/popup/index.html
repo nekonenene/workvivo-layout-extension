@@ -12,15 +12,15 @@
     </style>
   </head>
   <body>
-    <h1 style="font-size: 16px; margin: 0 0 8px">
+    <h1 style="font-size: 16px; margin: 0 0 8px;" data-i18n="panelTitle">
       設定
     </h1>
     <label>
       <input id="toggle" type="checkbox" />
-      拡張機能をON
+      <div data-i18n="enableToggleLabel">拡張機能をON</div>
     </label>
     <p>
-      <small>OFFにすると現在のタブを自動でリロードして変更をリセットします</small>
+      <small data-i18n="afterEnableToggleInfo">OFFにすると現在のタブを自動でリロードして変更をリセットします</small>
     </p>
     <script type="module" src="/src/popup/main.ts"></script>
   </body>
