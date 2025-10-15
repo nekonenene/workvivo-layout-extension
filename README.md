@@ -1,4 +1,4 @@
-# Workvivo Layout Modifier for Chrome Extensions
+# Workvivo Wider Feed - Chrome Extensions
 
 グロービス経営大学院の生徒向けコミュニティサイトとして  
 [Workvivo](https://workvivo.com) を使っているものがあるのですが、  
