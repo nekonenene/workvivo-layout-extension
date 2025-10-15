@@ -1,7 +1,7 @@
 const checkbox = document.getElementById('toggle') as HTMLInputElement;
 
 // 現在の状態を反映
-chrome.storage.sync.get({ enabled: true }, (res) => {
+chrome.storage.sync.get({ enabled: true }, (res: { enabled?: boolean }) => {
   checkbox.checked = !!res.enabled;
 });
 

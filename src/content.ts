@@ -1,51 +1,79 @@
-let enabled = true;
-let scheduled = 0;
+let enabled = true; // 拡張機能の有効 or 無効設定
+let scheduled = 0; // scheduleApply() にて連続発火を防ぐためのタイマーID
 
 // 初期値をロード
-chrome.storage.sync.get({ enabled: true }, (res) => {
+chrome.storage.sync.get({ enabled: true }, (res: { enabled?: boolean }) => {
   enabled = !!res.enabled;
   scheduleApply();
 });
 
 // storage変更監視（popupからの切替時）
-chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'sync' && changes.enabled) {
+chrome.storage.onChanged.addListener((changes: Record<string, chrome.storage.StorageChange>, areaName: chrome.storage.AreaName) => {
+  if (areaName === 'sync' && changes.enabled) {
     enabled = !!changes.enabled.newValue;
     scheduleApply();
   }
 });
 
-const isSpacesFeed = (url: string) => /\/spaces\/[^/]+\/feed\/?$/.test(new URL(url).pathname);
-
+// トップページに適用
 const applyForRootLike = () => {
-  const leftSidebar = document.querySelector<HTMLElement>('#leftSidebar');
-  if (leftSidebar && leftSidebar.style.display !== 'none') {
-    leftSidebar.style.display = 'none';
+  const leftSidebar = document.querySelector<HTMLElement>('aside#leftSidebar');
+  if (leftSidebar !== null && leftSidebar.classList.contains('col-xl-3')) {
+    // d-none クラスのみが残るはず
+    leftSidebar.classList.remove('col-xl-3', 'd-xl-block');
   }
-  const mainFeed = document.querySelector<HTMLElement>('[role="region"][aria-label="メインフィード"]');
-  if (mainFeed && mainFeed.classList.contains('col-xl-6')) {
-    mainFeed.classList.replace('col-xl-6', 'col-xl-9');
-  }
-};
-
-const applyForSpacesFeed = () => {
+  // main#mainContent の親要素の div であり、role="region" を対象にする
+  let targetDiv: HTMLElement | null = null;
   const main = document.querySelector<HTMLElement>('main#mainContent');
-  if (main && main.classList.contains('col-xl-6')) {
-    main.classList.replace('col-xl-6', 'col-xl-9');
+  if (main !== null) {
+    const parentDiv = main.parentElement;
+    if (parentDiv !== null && parentDiv.getAttribute('role') === 'region') {
+      targetDiv = parentDiv;
+    }
+  }
+  if (targetDiv !== null && targetDiv.classList.contains('col-xl-6')) {
+    targetDiv.classList.replace('col-xl-6', 'col-xl-9');
   }
 };
 
-const runOnce = () => {
-  if (!enabled) return;
-  if (isSpacesFeed(location.href)) applyForSpacesFeed();
-  else applyForRootLike();
+// スペースのページに適用
+const applyForSpacesFeed = () => {
+  const rightSidebar = document.querySelector<HTMLElement>('aside#rightSidebar');
+  if (rightSidebar !== null && rightSidebar.classList.contains('col-lg-3')) {
+    // d-none クラスのみが残るはず
+    rightSidebar.classList.remove('col-lg-3', 'd-lg-block');
+  }
+
+  // main#mainContent が複数あるダメなページなので、まず外側の aria-label="view-space" の指定がある mainContent を探す
+  const outerMainContent = document.querySelector<HTMLElement>('main#mainContent[aria-label="view-space"]');
+  const mainContent = outerMainContent ? outerMainContent.querySelector<HTMLElement>('main#mainContent') : null;
+  if (mainContent !== null && mainContent.classList.contains('col-lg-6')) {
+    mainContent.classList.replace('col-lg-6', 'col-lg-9');
+    mainContent.classList.replace('col-xl-6', 'col-xl-9');
+  }
 };
 
+// ページの現在URLを判定し、レイアウト変更を一度だけ実行する
+const modifyLayout = () => {
+  if (!enabled) return;
+
+  const pathname = new URL(location.href).pathname;
+  const isSpacesFeed = /\/spaces\/\d+\/feed\/?$/.test(pathname);
+
+  if (isSpacesFeed) {
+    applyForSpacesFeed();
+  } else {
+    applyForRootLike();
+  }
+};
+
+// modifyLayout() の多重実行を防ぐ（デバウンス処理）
 const scheduleApply = () => {
   if (scheduled) return;
+
   scheduled = window.setTimeout(() => {
     try {
-      runOnce();
+      modifyLayout();
     } finally {
       scheduled = 0;
     }
@@ -55,15 +83,14 @@ const scheduleApply = () => {
 // 初回実行
 scheduleApply();
 
-// DOM変更監視
+// DOM変更を監視
 const mo = new MutationObserver(() => scheduleApply());
 mo.observe(document.documentElement, { childList: true, subtree: true });
 
-// URL変化（SPA対応）
-const origPush = history.pushState;
-history.pushState = function (...args) {
-  const ret = origPush.apply(this, args as any);
+// SPA の URL 変化
+const origPush = history.pushState.bind(history);
+history.pushState = (...args: Parameters<History['pushState']>): void => {
+  origPush(...args);
   scheduleApply();
-  return ret;
 };
-window.addEventListener('popstate', scheduleApply);
+window.addEventListener('popstate', () => scheduleApply());
