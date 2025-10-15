@@ -2,7 +2,7 @@ import { defineManifest } from '@crxjs/vite-plugin';
 
 export default defineManifest({
   manifest_version: 3,
-  version: '1.0.1',
+  version: '1.0.2',
   default_locale: 'ja',
   name: '__MSG_extensionName__',
   description: '__MSG_extensionDescription__',

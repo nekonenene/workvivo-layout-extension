@@ -1,7 +1,6 @@
 {
   "name": "workvivo-layout-extension",
   "description": "Workvivo Layout Modifier for Chrome Extensions",
-  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
