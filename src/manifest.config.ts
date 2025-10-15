@@ -1,4 +1,4 @@
-import { defineManifest } from '@crxjs/vite-plugin'
+import { defineManifest } from '@crxjs/vite-plugin';
 
 export default defineManifest({
   manifest_version: 3,
@@ -9,7 +9,7 @@ export default defineManifest({
 
   action: {
     default_popup: 'popup/index.html',
-    default_title: 'Workvivo Layout Modifier'
+    default_title: 'Workvivo Layout Modifier',
   },
 
   permissions: ['storage', 'tabs'],
@@ -19,7 +19,7 @@ export default defineManifest({
     {
       matches: ['https://*.workvivo.us/*'],
       js: ['src/content.ts'],
-      run_at: 'document_idle'
-    }
-  ]
-})
+      run_at: 'document_idle',
+    },
+  ],
+});
