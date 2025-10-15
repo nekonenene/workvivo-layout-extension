@@ -11,7 +11,7 @@
   "enableToggleLabel": {
     "message": "拡張機能をON"
   },
-  "afterEnableToggleInfo": {
-    "message": "OFFにすると現在のタブを自動でリロードして変更をリセットします"
+  "enableToggleNote": {
+    "message": "変更された設定は、ページのリロード後に反映されます"
   }
 }

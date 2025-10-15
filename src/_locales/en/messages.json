@@ -11,7 +11,7 @@
   "enableToggleLabel": {
     "message": "Enable Extension"
   },
-  "afterEnableToggleInfo": {
-    "message": "Turning it off will automatically reload the current tab"
+  "enableToggleNote": {
+    "message": "Changes will apply after reloading the page"
   }
 }

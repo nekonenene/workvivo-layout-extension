@@ -13,8 +13,7 @@ export default defineManifest({
     default_title: '__MSG_extensionName__',
   },
 
-  permissions: ['storage', 'tabs'],
-  host_permissions: ['https://*.workvivo.us/*'],
+  permissions: ['storage'],
 
   background: {
     service_worker: 'src/background.ts',
