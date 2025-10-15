@@ -67,7 +67,38 @@ const modifyLayout = () => {
   }
 };
 
-// modifyLayout() の多重実行を防ぐ（デバウンス処理）
+// style の追加（初回実行時のみ）
+const addStyle = () => {
+  const style = document.createElement('style');
+  style.textContent = `
+    .activity-text h1 {
+      font-size: 1.6rem;
+    }
+
+    .activity-text h2 {
+      font-size: 1.3rem;
+    }
+
+    .card-body .tw-flex button.btn.btn-link {
+      width: 100%;
+      height: 26px;
+      border: 1px solid #d7d3e3;
+      background-color: #fafafa;
+    }
+
+    .card-body .tw-flex button.btn.btn-link:hover {
+      background-color: #ececec;
+    }
+
+    .card-body .tw-flex button.btn.btn-link svg {
+      margin: auto;
+    }
+  `;
+  document.head.appendChild(style);
+};
+
+// ページ読み込み時やDOM変更時に呼ばれる
+// modifyLayout() の連続実行を防ぐため debounce 処理が含まれている
 const scheduleApply = () => {
   if (scheduled) return;
 
@@ -81,6 +112,7 @@ const scheduleApply = () => {
 };
 
 // 初回実行
+addStyle();
 scheduleApply();
 
 // DOM変更を監視
